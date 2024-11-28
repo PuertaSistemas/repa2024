@@ -1,16 +1,17 @@
-from fastapi import FastAPI, Body, Path, Query
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
-from pydantic import BaseModel, Field, validator
-from typing import Optional, List
-from src.routes.user_router import user_router
+from fastapi import FastAPI
+from src.routes.user_routes import user_router
+from src.db.database import Base, engine
+
+# Crear tablas en la base de datos
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 app.title = "REPA IAViM - 2024"
 app.version = "0.0.1"
 
-app.include_router(prefix='/users', router=user_router)
+# Incluir rutas
+app.include_router(user_router, prefix="/users", tags=["Users"])
 
-@app.get('/', tags=['Home'])
-def message():
-    #secret_key = os.getenv("POSTGRES_DB")
-    return {"POSTGRES_USER": POSTGRES_USER, "POSTGRES_PORT": POSTGRES_PORT, "POSTGRES_DB":POSTGRES_DB}
+@app.get("/")
+def root():
+    return {"message": "API de Gestión de Usuarios funcionando correctamente"}
