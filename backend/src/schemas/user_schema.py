@@ -4,7 +4,7 @@ from datetime import datetime
 
 class UserBase(BaseModel):
     email: EmailStr
-    is_admin: bool
+    role: str  # El rol del usuario
 
 class UserCreate(UserBase):
     password: str
