@@ -11,3 +11,4 @@ class User(Base):
     role = Column(String, default="viewer")  # Define roles: admin, editor, viewer, etc.
     created_at = Column(DateTime, default=datetime.utcnow)
     last_login = Column(DateTime, default=None, nullable=True)
+    person = relationship("Person", back_populates="user", uselist=False)
