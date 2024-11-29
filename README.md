@@ -15,17 +15,18 @@ Para instalar el entorno de desarrollo se debe ejecutar:
 
 Estructura de la aplicación:
 
-`my_app/`
-`├── main.py`
-`├── db/`
-`│   ├── database.py`
-`├── models/`
-`│   ├── user_model.py`
-`├── schemas/`
-`│   ├── user_schema.py`
-`├── routes/`
-`│   ├── user_routes.py`
-`└── requirements.txt`
-
+```
+my_app/
+├── main.py
+├── db/
+│   ├── database.py
+├── models/
+│   ├── user_model.py
+├── schemas/
+│   ├── user_schema.py
+├── routes/
+│   ├── user_routes.py
+└── requirements.txt
+```
 
 
