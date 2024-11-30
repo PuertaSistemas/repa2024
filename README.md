@@ -15,6 +15,35 @@ Para instalar el entorno de desarrollo se debe ejecutar, dentro del direcotrio *
 
 Ésto iniciará los contenedores de Docker con la aplicación Backend en FastAPI, el motor de base de datos Postgress y la aplicación de frontend en REACT.
 
+## Lógica de la aplicación:
+
+La aplicación registra información básicamente de dos "ENTIDADES" principales. Una entidad son las PERSONAS y la segunda entidad son las EMPRESAS.
+
+### Relación de las entidades
+
+```
+my_app/
+│
+├── usuarios/
+│   ├── persona
+│   ├── presentacion_personal
+│   ├── obra_audiovisual
+│   ├── capacitación
+│   ├── formacion
+│   ├── participación_IAAVIM
+│   ├── empresa
+│         ├── obra_audiovisual
+│         ├── participacion_foros
+
+```
+
+La información es cargada en la plataforma, a partir de un usuario.
+
+El usuario será responsable de la información registrada, deberá registrar su información personal, las obras audiovisuales, capacitaciones, formación y su participación en IAAVIM.
+
+De la misma manera, un usuario podrá registrar todas las empresas que haya creado. Y la información asociada a cada empresa. Las obras producidas, participaciones, etc.
+
+
 ## Estructura de la aplicación:
 
 La API de Backend mantiene la sigueinte estructura de directorios:
