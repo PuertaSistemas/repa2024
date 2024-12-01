@@ -1,7 +1,6 @@
-# schemas/person_schema.py
-from pydantic import BaseModel
+from pydantic import BaseModel, validator, ValidationError
 from datetime import date
-from typing import Optional
+from typing import Optional, Literal
 
 class PersonBase(BaseModel):
     nombre: str
@@ -9,10 +8,27 @@ class PersonBase(BaseModel):
     dni_cuit_cuil: str
     fecha_nacimiento: date
     nacionalidad: str
-    identidad_genero: str
-    etnia: bool
+    identidad_genero: Literal[
+        "Mujer", "Mujer trans", "Varón", "Varón Trans", "Prefiero no decirlo"
+    ]  # Validación de lista de opciones
+    etnia: bool = False  # Valor predeterminado: False
     etnia_nombre: Optional[str]
-    estado_civil: str
+    estado_civil: Literal[
+        "Solter@", "Casad@", "Viud@", "Divorciad@", "En unión de hecho", "En unión convivencial"
+    ]  # Validación de lista de opciones
+    educacion_nivel: Optional[
+        Literal[
+            "PRIMARIO",
+            "EGB",
+            "SECUNDARIO",
+            "POLIMODAL",
+            "TERCIARIO NO UNIVERSITARIO",
+            "UNIVERSITARIO DE GRADO",
+            "POSGRADO",
+        ]
+    ]  # Validación de lista de opciones
+    educacion_titulo: Optional[str]
+    educacion_institucion: Optional[str]
     personas_a_cargo: int
     tipo_contribuyente: str
     actividad_registrada: str
@@ -26,6 +42,13 @@ class PersonBase(BaseModel):
     dir_departamento: str
     dir_provincia: str
     dir_pais: str
+
+    @validator("etnia_nombre")
+    def validate_etnia_nombre(cls, etnia_nombre, values):
+        # Si "etnia" es True, "etnia_nombre" debe ser proporcionado
+        if values.get("etnia") and not etnia_nombre:
+            raise ValueError("Si 'etnia' es True, 'etnia_nombre' debe completarse")
+        return etnia_nombre
 
 class PersonCreate(PersonBase):
     pass
