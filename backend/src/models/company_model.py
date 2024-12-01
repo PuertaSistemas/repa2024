@@ -14,7 +14,7 @@ class Company(Base):
     fixed_employees = Column(Integer, nullable=True)
     temporary_employees = Column(Integer, nullable=True)
     productions = Column(Integer, nullable=True)
-    funding_source = Column(Integer, nullable=True)
+    funding_source = Column(String, nullable=True)
 
     user_email = Column(String, ForeignKey("users.email"))
     user = relationship("User", back_populates="company")

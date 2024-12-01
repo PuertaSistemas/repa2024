@@ -17,12 +17,30 @@ class CompanyBase(BaseModel):
             "Asociación Civil",
             "Unipersonal/Monotributista"
             ]
-        ]
+        ] = "Unipersonal/Monotributista"
     annual_revenue: int
     fixed_employees: int
     temporary_employees: int
     productions: int
-    funding_source: int
+    funding_source: Optional[
+        Literal[
+            "Fondos Propios",
+            "Coproducciones con asociados nacionales",
+            "Coproducciones con asociados internacionales",
+            "Fondos INCAA",
+            "Fondos IAAviM",
+            "Fondos Provinciales o Municipales",
+            "Financiamiento de Organismos Internacionales o Premios de festivales",
+            "Ventas a mercados internacionales",
+            "Ventas en el mercado nacional",
+            "Servicios a terceros nacionales",
+            "Servicios a terceros internacionales",
+            "Donaciones",
+            "préstamos",
+            "legados",
+            "Otros"
+        ]
+    ] = "Fondos Propios"
 
 class CompanyCreate(CompanyBase):
     pass
