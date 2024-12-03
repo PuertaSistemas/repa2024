@@ -14,3 +14,4 @@ class User(Base):
     person = relationship("Person", back_populates="user", uselist=False) # Relación 1:1 con Person
     company = relationship("Company", back_populates="user", uselist=False) # Relación 1:N con Company
     trainings = relationship("Training", back_populates="user")  # Relación 1:N con Training
+    audiovisual_works = relationship("AudiovisualWork", back_populates="user")  # Relación 1:N con AudiovisualWork

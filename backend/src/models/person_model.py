@@ -34,4 +34,5 @@ class Person(Base):
     dir_provincia = Column(String, nullable=True)
     dir_pais = Column(String, nullable=True)
 
+    # Relación con el usuario
     user = relationship("User", back_populates="person")

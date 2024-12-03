@@ -25,13 +25,13 @@ La aplicación registra información básicamente de dos "ENTIDADES" principales
 my_app/
 │
 ├── usuarios/
-│   ├── persona
+│   ├── persona*
 │   ├── presentacion_personal
 │   ├── obra_audiovisual
 │   ├── capacitación
-│   ├── formacion
+│   ├── formacion*
 │   ├── participación_IAAVIM
-│   ├── empresa
+│   ├── empresa*
 │         ├── obra_audiovisual
 │         ├── participacion_foros
 
