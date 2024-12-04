@@ -69,14 +69,14 @@ class AudiovisualWorkBase(BaseModel):
 
     #@validator("formato_descripcion")
     #def validate_format(cls, formato, values):
-        # Si "formato" es True, "formato_descripcion" debe ser proporcionado
-    #    if values.get("formato") and not formato_descripcion:
+        # Si "formato" es Otros, "formato_descripcion" debe ser proporcionado
+    #    if (values.get("formato") = "Otros") and not formato_descripcion:
     #        raise ValueError("Si el formato es 'Otros', el campo 'formato_descripcion' es obligatorio.")
     #    return formato_descripcion
 
     #@validator("genero_descripcion")
     #def validate_genero(cls, genero, values):
-        # Si "genero" es True, "genero_descripcion" debe ser proporcionado
+        # Si "genero" es Otros, "genero_descripcion" debe ser proporcionado
     #    if values.get("genero") and not genero_descripcion:
     #        raise ValueError("Si el género es 'Otros', el campo 'genero_descripcion' es obligatorio.")
     #    return genero_descripcion

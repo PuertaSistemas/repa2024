@@ -3,6 +3,7 @@ from src.routes.user_routes import user_router
 from src.routes.person_routes import person_router
 from src.routes.company_routes import company_router
 from src.routes.training_routes import training_router
+from src.routes.collaborator_routes import collaborator_router
 from src.routes.audiovisual_work_routes import audiovisual_router
 from src.db.database import Base, engine
 
@@ -19,6 +20,7 @@ app.include_router(person_router, prefix="/persons", tags=["Persons"])
 app.include_router(training_router, prefix="/training", tags=["Training"])
 app.include_router(company_router, prefix="/company", tags=["Company"])
 app.include_router(audiovisual_router, prefix="/audiovisual-works", tags=["Audiovisual Works"])
+app.include_router(collaborator_router, prefix="/collaborators", tags=["Collaborators"])
 
 @app.get("/")
 def root():

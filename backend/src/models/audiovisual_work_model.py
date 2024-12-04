@@ -46,3 +46,4 @@ class AudiovisualWork(Base):
     # Relación con el usuario
     user_email = Column(String, ForeignKey("users.email"))
     user = relationship("User", back_populates="audiovisual_works")
+    collaborators = relationship("Collaborator", back_populates="audiovisual_work")
