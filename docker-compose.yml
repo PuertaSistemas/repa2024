@@ -23,6 +23,12 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+
   adminer:
     image: adminer
     #restart: always
