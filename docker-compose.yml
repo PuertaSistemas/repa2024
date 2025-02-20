@@ -1,15 +1,6 @@
 version: "3"
 
 services:
-  backend:
-    build: ./backend
-    volumes:
-      - type: bind
-        source: ./backend/src
-        target: /code/src
-    ports:
-      - "8000:80"
-
   db:
     image: postgres
     #restart: always
@@ -23,17 +14,40 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  frontend:
-    build: ./frontend
-    container_name: frontend
-    ports:
-      - "80:80"
-
   adminer:
     image: adminer
     #restart: always
     ports:
       - 8080:8080
+
+  backend:
+    build: ./backend
+    volumes:
+      - type: bind
+        source: ./backend/src
+        target: /code/src
+    ports:
+      - "8000:80"
+
+  frontend:
+    build: ./frontend
+    environment:
+      NODE_ENV: ${NODE_ENV}
+    ports:
+      - ${PORT}:${PORT}
+    command: npm run dev
+    develop:
+      watch:
+        - action: rebuild
+          path: ./frontend/src
+          target: /usr/src/app/
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+    #depends_on:
+    #  - backend
+    #  - db
 
 volumes:
   pgdata:

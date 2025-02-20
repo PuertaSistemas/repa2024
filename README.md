@@ -15,6 +15,22 @@ Para instalar el entorno de desarrollo se debe ejecutar, dentro del direcotrio *
 
 Ésto iniciará los contenedores de Docker con la aplicación Backend en FastAPI, el motor de base de datos Postgress y la aplicación de frontend en REACT.
 
+Es importante configurar las variables de entorno en el archivo *.env*
+El archivo .env está alojado en el PATH "./backend/src/.env" y por motivos de  compatibilidad se sugiere crear un enlace dinámico del archivo desde la raíz del proyecto con " $> ln -s ./backend/src/.env .env"
+
+| Variable | Valor |
+| POSTGRES_USER | 'postgres' |
+| POSTGRES_PASSWORD | 'example' |
+| POSTGRES_PORT | 5432 |
+| POSTGRES_DB | 'iaavim' |
+| POSTGRES_DBHOST | repa2024-db-1 |
+| DATABASE_URL | 'postgresql://postgres:example@db:5432/iaavim' |
+| SECRET_KEY | '09d25e094faa6cad3e7' |
+| ALGORITHM | 'HS256' |
+| ACCESS_TOKEN_EXPIRE_MINUTES | 30 |
+| NODE_ENV | 'develop' |
+| PORT | '3000' |
+
 ## Lógica de la aplicación:
 
 La aplicación registra información básicamente de dos "ENTIDADES" principales. Una entidad son las PERSONAS y la segunda entidad son las EMPRESAS.

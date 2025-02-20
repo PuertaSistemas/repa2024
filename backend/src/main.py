@@ -7,6 +7,7 @@ from src.routes.collaborator_routes import collaborator_router
 from src.routes.audiovisual_work_routes import audiovisual_router
 from src.routes.audiovisual_upload_routes import audiovisual_upload_router
 from src.db.database import Base, engine
+from fastapi.middleware.cors import CORSMiddleware
 
 # Crear tablas en la base de datos
 Base.metadata.create_all(bind=engine)
@@ -14,6 +15,16 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 app.title = "REPA IAViM - 2024"
 app.version = "0.0.12"
+
+origin = ['*'] # URL permitidas para consumir la API
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origin,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+    )
 
 # Incluir rutas a módulos
 app.include_router(user_router, prefix="/users", tags=["Users"])
