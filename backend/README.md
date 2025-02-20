@@ -166,8 +166,13 @@ class Training(Base):
 ### Detalle Estructura de datos:
 
 1 User --> 1 Person
+
 1 User --> N Company
+
 1 User --> N Training
+
 1 User --> N Audiovisual_Work
+
 1 Audiovisual_Work --> N Collaborator
+
 1 Audiovisual_Work --> N Audiovisual_Upload
