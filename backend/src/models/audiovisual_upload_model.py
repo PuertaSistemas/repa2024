@@ -11,4 +11,4 @@ class AudioVisualUpload(Base):
     pdf_path = Column(String, nullable=True)  # Ruta del archivo PDF
     audiovisual_work_id = Column(Integer, ForeignKey("audiovisual_works.id"))
 
-    audiovisual_work = relationship("AudiovisualWork", back_populates="audiovisualupload")
+    audiovisual_work = relationship("AudiovisualWork", back_populates="audiovisual_uploads")

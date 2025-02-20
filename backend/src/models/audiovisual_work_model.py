@@ -44,6 +44,7 @@ class AudiovisualWork(Base):
     venta_internacional = Column(String, nullable=True)
 
     # Relación con el usuario
-    user_email = Column(String, ForeignKey("users.email"))
+    # user_email = Column(String, ForeignKey("users.email"))
     user = relationship("User", back_populates="audiovisual_works")
     collaborators = relationship("Collaborator", back_populates="audiovisual_work")
+    audiovisual_uploads = relationship("AudioVisualUpload", back_populates="audiovisual_work")

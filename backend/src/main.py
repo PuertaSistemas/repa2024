@@ -5,7 +5,7 @@ from src.routes.company_routes import company_router
 from src.routes.training_routes import training_router
 from src.routes.collaborator_routes import collaborator_router
 from src.routes.audiovisual_work_routes import audiovisual_router
-#from src.routes.audiovisual_upload_routes import audiovisual_upload_router
+from src.routes.audiovisual_upload_routes import audiovisual_upload_router
 from src.db.database import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -14,7 +14,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 app.title = "REPA IAViM - 2024"
-app.version = "0.0.12"
+app.version = "0.1.1"
 
 origin = ['*'] # URL permitidas para consumir la API
 
@@ -34,7 +34,7 @@ app.include_router(company_router, prefix="/company", tags=["Company"]) # Person
 
 # Audio Visuales realizados por la persona / Empresa
 app.include_router(audiovisual_router, prefix="/audiovisual-works", tags=["Audiovisual Works"])
-#app.include_router(audiovisual_upload_router, prefix="/audiovisual-upload", tags=["Upload Image"])
+app.include_router(audiovisual_upload_router, prefix="/audiovisual-upload", tags=["Upload Image"])
 app.include_router(collaborator_router, prefix="/collaborators", tags=["Collaborators"])
 # Participación de Persona Juridica / Empresa en Foros o reuniones
 #
