@@ -1,12 +1,4 @@
-Aquí tienes el contenido del documento "Propuesta de Estructura de Datos" convertido a formato Markdown:
-
-```markdown
 # Propuesta de Estructura de Datos para REPA
-
-**Tu empresa**
-Tu calle, 123
-12345 Tu ciudad (Provincia)
-(34) 000 000 000
 
 **REPA - IAAviM**
 20 de Febrero del 2025
@@ -169,7 +161,7 @@ class AudiovisualWork(Base):
 class Training(Base):
     __tablename__ = "trainings"
     id = Column(Integer, primary_key=True, index
-
+```
 
 ### Detalle Estructura de datos:
 
