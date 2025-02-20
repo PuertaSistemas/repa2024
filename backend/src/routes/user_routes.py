@@ -61,7 +61,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user = User(
         email=user.email,
         hashed_password=hashed_password,
-        role=user.role,
+        role=user.role
     )
     db.add(new_user)
     db.commit()
