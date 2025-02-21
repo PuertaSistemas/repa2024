@@ -1,6 +1,10 @@
+## Estructura de implementación
+
 Aquí tienes un ejemplo de una aplicación CRUD con FastAPI y SQLAlchemy para la gestión de usuarios con las características que mencionas. El código está estructurado en cuatro módulos principales: Schemas, Routes, Models, y DB.
 Estructura del Proyecto
 
+
+```
 my_app/
 ├── main.py
 ├── db/
@@ -13,13 +17,18 @@ my_app/
 │   ├── user_routes.py
 └── requirements.txt
 
+```
+
 1. Archivo principal (main.py)
 
+
+```
 from fastapi import FastAPI
 from routes.user_routes import user_router
 from db.database import Base, engine
 
 # Crear tablas en la base de datos
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -31,8 +40,12 @@ app.include_router(user_router, prefix="/users", tags=["Users"])
 def root():
     return {"message": "API de Gestión de Usuarios funcionando correctamente"}
 
+```
+
 2. Base de datos (db/database.py)
 
+
+```
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -51,8 +64,12 @@ def get_db():
     finally:
         db.close()
 
+```
+
 3. Modelos (models/user_model.py)
 
+
+```
 from sqlalchemy import Column, String, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from db.database import Base
@@ -67,8 +84,11 @@ class User(Base):
     last_login = Column(DateTime, default=None, nullable=True)
     is_admin = Column(Boolean, default=False)
 
+```
+
 4. Esquemas (schemas/user_schema.py)
 
+```
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
@@ -84,8 +104,11 @@ class UserOut(UserBase):
     created_at: datetime
     last_login: Optional[datetime]
 
+```
+
 5. Rutas (routes/user_routes.py)
 
+```
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from models.user_model import User
@@ -147,8 +170,11 @@ def delete_user(email: str, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Usuario eliminado correctamente"}
 
+```
+
 6. Dependencias (requirements.txt)
 
+```
 fastapi
 uvicorn
 sqlalchemy
@@ -156,29 +182,31 @@ psycopg2-binary
 passlib[bcrypt]
 pydantic[email]
 
+```
 Ejecución
 
     Configura tu base de datos Postgres: Cambia el valor de DATABASE_URL en db/database.py a tus credenciales reales.
 
     Instala las dependencias:
 
+```
 pip install -r requirements.txt
 
-Ejecuta la aplicación:
+```
 
+## Ejecuta la aplicación:
+
+
+```
     uvicorn main:app --reload
 
     Accede a la documentación interactiva: Ve a http://127.0.0.1:8000/docs.
 
-a. ¿Quieres agregar autenticación con tokens JWT?
-b. ¿Necesitas manejar paginación o filtros en los endpoints?
-Dijiste:
-a
-ChatGPT dijo:
-GPT
+```
 
 Para agregar autenticación con tokens JWT a la aplicación, puedes usar la librería python-jose para la generación y validación de tokens. Esto permitirá que los usuarios inicien sesión y obtengan un token JWT, que pueden usar para autenticarse en los endpoints protegidos.
 Modificaciones necesarias
+
 1. Actualiza los requisitos (requirements.txt):
 
 python-jose[cryptography]
@@ -193,6 +221,7 @@ Crea un archivo auth.py para manejar la generación y validación de tokens.
 
 auth/auth.py:
 
+```
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional
@@ -218,12 +247,15 @@ def verify_token(token: str):
     except JWTError:
         return None
 
+```
+
 3. Rutas de autenticación
 
 Agrega rutas para el inicio de sesión y la validación de usuarios autenticados.
 
 Modifica routes/user_routes.py:
 
+```
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -269,8 +301,11 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 def get_me(current_user: User = Depends(get_current_user)):
     return current_user
 
+```
+
 4. Actualiza el esquema user_schema.py:
 
+```
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -306,20 +341,19 @@ Ejemplo de uso
     Usa /users/login para autenticarte.
     Usa el token en /users/me o cualquier otra ruta protegida.
 
-a. ¿Quieres proteger más endpoints con JWT?
-b. ¿Deseas implementar un sistema de roles basado en permisos?
-Dijiste:
-a
-ChatGPT dijo:
-GPT
+```
+
+## Control de Acceso Seguridad
 
 Para proteger más endpoints con JWT, puedes aplicar la dependencia get_current_user a cualquier ruta que deba estar protegida. Esto asegura que el usuario esté autenticado antes de acceder a la funcionalidad. Aquí tienes un paso a paso:
+
 1. Protección de Endpoints
 
 Reutiliza la dependencia get_current_user que validará el token JWT y recuperará la información del usuario actual.
 
 Ejemplo de actualización en routes/user_routes.py:
 
+```
 from fastapi import Depends
 
 # Actualizar el endpoint de eliminación de usuario para requerir autenticación
@@ -350,10 +384,13 @@ def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_c
 
     return db.query(User).all()
 
+```
+
 2. Permitir a los Usuarios Acceder Solo a sus Datos
 
 Puedes personalizar la lógica para que los usuarios solo puedan acceder a sus propios datos si no son administradores.
 
+```
 @user_router.get("/{email}", response_model=UserOut)
 def get_user(
     email: str,
@@ -369,12 +406,15 @@ def get_user(
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return db_user
 
+```
+
 3. Proteger Todos los Endpoints
 
 Agrega la dependencia get_current_user como parámetro en los endpoints que requieran autenticación. Esto es útil para cualquier acción sensible, como actualización, eliminación o creación de datos confidenciales.
 
 Ejemplo:
 
+```
 @user_router.patch("/{email}/last-login", response_model=UserOut)
 def update_last_login(
     email: str,
@@ -394,6 +434,8 @@ def update_last_login(
     db.refresh(db_user)
     return db_user
 
+```
+
 4. Añade Más Pruebas de Seguridad
 
 Si deseas proteger aún más tu API, considera:
@@ -410,13 +452,6 @@ Ahora puedes proteger cualquier endpoint simplemente añadiendo current_user: Us
     Carga al usuario autenticado.
     Permite personalizar la lógica de acceso según el rol o las características del usuario.
 
-a. ¿Quieres implementar roles y permisos más detallados?
-b. ¿Necesitas ejemplos de pruebas automatizadas para los endpoints protegidos?
-Dijiste:
-a
-ChatGPT dijo:
-GPT
-
 Para implementar roles y permisos más detallados en tu aplicación, puedes usar un sistema de control de acceso basado en roles. Esto implica asignar roles específicos a los usuarios y definir qué acciones pueden realizar según su rol.
 Plan para implementar roles y permisos
 
@@ -429,11 +464,13 @@ Plan para implementar roles y permisos
     Aplicar esta lógica a los endpoints protegidos.
     Usa dependencias o decoradores para verificar roles en los endpoints.
 
-Implementación
+## Implementación
+
 1. Actualizar el modelo de usuario
 
 Modifica el modelo para agregar un campo role.
 
+```
 # models/user_model.py
 from sqlalchemy import Column, String
 from db.database import Base
@@ -446,10 +483,13 @@ class User(Base):
     role = Column(String, default="viewer")  # Define roles: admin, editor, viewer, etc.
     # Otros campos...
 
+```
+
 2. Actualizar el esquema de usuario
 
 Incluye el campo role en los esquemas de entrada y salida.
 
+```
 # schemas/user_schema.py
 class UserBase(BaseModel):
     email: EmailStr
@@ -479,10 +519,13 @@ def has_role(required_roles: list[str]):
         return current_user
     return role_checker
 
+```
+
 4. Aplicar verificación de roles en los endpoints
 
 Usa la función has_role como dependencia en los endpoints para aplicar restricciones basadas en roles.
 
+```
 # routes/user_routes.py
 from auth.permissions import has_role
 
@@ -523,6 +566,8 @@ def delete_user(
     db.commit()
     return {"message": "Usuario eliminado correctamente"}
 
+```
+
 5. Roles sugeridos y permisos
 
 Define roles y permisos según tus necesidades. Por ejemplo:
@@ -530,6 +575,7 @@ Rol	Permisos
 Admin	Crear, editar, eliminar y listar usuarios.
 Editor	Crear y editar usuarios, pero no eliminarlos.
 Viewer	Solo puede listar o ver información.
+
 6. Pruebas
 
 Asegúrate de probar los permisos implementados:
@@ -542,6 +588,7 @@ Asegúrate de probar los permisos implementados:
 
 Ejemplo:
 
+```
 # Prueba caso de éxito
 response = client.get("/users/", headers={"Authorization": f"Bearer {admin_token}"})
 assert response.status_code == 200
@@ -550,7 +597,8 @@ assert response.status_code == 200
 response = client.get("/users/", headers={"Authorization": f"Bearer {viewer_token}"})
 assert response.status_code == 403
 
+```
+
 Con esta implementación, ahora tienes un sistema flexible de control de acceso basado en roles. Puedes personalizar aún más los roles según tus necesidades.
 
-a. ¿Te gustaría agregar pruebas automáticas completas para este sistema?
-b. ¿Quieres soporte para roles jerárquicos (herencia de permisos entre roles)?
+```
