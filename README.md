@@ -90,7 +90,7 @@ my_app/
 
 - En el directorio **db** se encuentra el archivo de configuración de conexión a la base de datos, y es utilizado por los distintos módulos que necesitan conectarse a los datos.
 - El directorio **auth** contiene las funcionalidades que permiten la gestión de tokens y la gestión de las Listas de Control de Acceso (ACL) de los usuarios.
-- En el directorio **models** se encuentran definido los modelos de datos para cada uno de los objetos, como *usuarios*, *personas*, *empresas*, etc.
+- En el directorio **models** se encuentran definidos los modelos de datos para cada uno de los objetos, como *usuarios*, *personas*, *empresas*, etc.
 - En el directorio **schemas** se encuentran definidas las **clases** que define la estructura de datos para cada uno de los objetos, y cómo se interactúa con ellos en cada caso.
 - En el directorio **routes** se encuentra la lógica del sistema: se declaran las rutas para la ejecución de las funcionalidades del sistema, y la lógica de funcionamiento. Implementa también las ACL a cada una de las rutas, de acuerdo a la lógica de negocio definida.
 
