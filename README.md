@@ -10,13 +10,18 @@ El backend implementa la gestión de permisos de usuario mediante JWT, en un mó
 Es necesario contar con docker ya instalado y funcionando correctamente.
 
 Para instalar el entorno de desarrollo se debe ejecutar dentro del directorio **repa2024** es siguiente comando:
-
-`$> docker compose up`
+```bash
+docker compose up
+```
 
 Esto iniciará los contenedores de docker con la aplicación backend en FastAPI, el motor de base de datos PostgreSQL y la aplicación de frontend en REACT.
 
-Es importante configurar las variables de entorno en el archivo *.env*
-El archivo .env está alojado en el PATH "./backend/src/.env" y por motivos de  compatibilidad se sugiere crear un enlace dinámico del archivo desde la raíz del proyecto con " $> ln -s ./backend/src/.env .env"
+> [!important]
+> Es importante configurar las variables de entorno en el archivo *.env*.
+> El archivo .env está alojado en el PATH `./backend/src/.env` y por motivos de  compatibilidad se sugiere crear un enlace dinámico del archivo desde la raíz del proyecto, ejecutando
+> ```bash
+> ln -s ./backend/src/.env .env
+> ```
 
 | Variable                    | Valor                                          |
 |-----------------------------|------------------------------------------------|
