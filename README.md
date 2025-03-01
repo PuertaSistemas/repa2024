@@ -9,7 +9,7 @@ El backend implementa la gestión de permisos de usuario mediante JWT, en un mó
 
 Es necesario contar con docker ya instalado y funcionando correctamente.
 
-Para instalar el entorno de desarrollo se debe ejecutar dentro del direcotrio **repa2024** es siguiente comando:
+Para instalar el entorno de desarrollo se debe ejecutar dentro del directorio **repa2024** es siguiente comando:
 
 `$> docker compose up`
 
