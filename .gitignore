@@ -20,6 +20,10 @@ site_build
 venv
 docs.zip
 archive.zip
+.env
+
+./pgdata
+./pgdata*
 
 # vim temporary files
 *~
