@@ -6,7 +6,7 @@ from passlib.context import CryptContext
 from src.auth.auth import create_access_token, verify_token, get_current_user # Se mueve la funcion 'get_current_user' a la libreria de 'auth'
 from src.auth.permissions import has_role
 from src.models.user_model import User
-from src.schemas.user_schema import UserCreate, UserOut
+from src.schemas.user_schema import UserCreate, UserOut, UserUpdate
 from src.db.database import get_db
 from datetime import datetime
 
@@ -26,7 +26,7 @@ def update_last_login(email: str, db: Session = Depends(get_db)):
     db.refresh(db_user)
     #return db_user
 
-# Crear un usuario
+# Crear un usuario nuevo
 @user_router.post("/register", response_model=UserOut)
 def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
     # Verificar si el usuario ya existe
@@ -50,26 +50,41 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
-# Ruta para iniciar sesión Verificar ésta ruta....
+
+# Inicio de sesión [form_data: OAuth2PasswordRequestForm = Depends()]
 @user_router.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == form_data.username).first()
     if not user or not pwd_context.verify(form_data.password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Credenciales inválidas")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
 
-    token = create_access_token(data={"sub": user.email})
-    # Actualizar el registro de last_login del usuario...
-    update_last_login(User.email, db)
-    return {"access_token": token, "token_type": "bearer"}
+    # Actualizar el último login
+    user.last_login =  datetime.utcnow()
+    db.commit()
 
-# Obtener un usuario por email
-@user_router.get("/{email}", response_model=UserOut)
-def get_user(email: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    access_token = create_access_token(data={"sub": user.id})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+# Actualizar usuario (por ejemplo, cambiar contraseña)
+@user_router.put("/me", response_model=UserOut)
+def update_user(user_update: UserUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if user_update.email:
+        current_user.email = user_update.email
+    if user_update.password:
+        current_user.hashed_password = pwd_context.hash(user_update.password)
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+# Obtener un usuario por id
+@user_router.get("/{user_id}", response_model=UserOut)
+def get_user(user_id: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     # Los administradores pueden acceder a cualquier usuario
-    if not current_user.is_admin and current_user.email != email:
+    if has_user_role(user_id, '["admin"]') and current_user.id != user_id:
         raise HTTPException(status_code=403, detail="No tienes permisos para acceder a este usuario")
-
-    db_user = db.query(User).filter(User.email == email).first()
+    
+    db_user = db.query(User).filter(User.id == current_user.id).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return db_user
